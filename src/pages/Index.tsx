@@ -1,9 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
+
+const useScrollAnimation = () => {
+  const elementRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return { elementRef, isVisible };
+};
 
 const newsArticles = [
   {
@@ -14,8 +39,7 @@ const newsArticles = [
     date: '1 октября 2025',
     image: '/img/b4128785-3fd5-46e3-8155-c2eedfbd61c5.jpg',
     excerpt: 'Аналитика показывает стремительный рост интереса к IT, креативным индустриям и зеленой энергетике среди молодых специалистов.',
-    featured: true,
-    views: '12.5K'
+    featured: true
   },
   {
     id: 2,
@@ -24,8 +48,7 @@ const newsArticles = [
     date: '30 сентября 2025',
     image: '/img/8fc47fd0-3951-4f70-a0ad-54d9ef8bd66a.jpg',
     excerpt: 'Венчурные фонды инвестировали более 15 млрд рублей в проекты молодых предпринимателей.',
-    featured: false,
-    views: '8.2K'
+    featured: false
   },
   {
     id: 3,
@@ -34,8 +57,7 @@ const newsArticles = [
     date: '29 сентября 2025',
     image: '/img/c638a47c-f38a-4017-8d74-510022a12ef4.jpg',
     excerpt: 'Минобрнауки объявило о старте федеральной программы межрегионального студенческого обмена.',
-    featured: false,
-    views: '6.7K'
+    featured: false
   },
   {
     id: 4,
@@ -43,8 +65,7 @@ const newsArticles = [
     category: 'Экология',
     date: '28 сентября 2025',
     excerpt: 'Правительство выделило гранты на реализацию 200+ проектов по защите окружающей среды.',
-    featured: false,
-    views: '5.1K'
+    featured: false
   },
   {
     id: 5,
@@ -52,25 +73,26 @@ const newsArticles = [
     category: 'Технологии',
     date: '27 сентября 2025',
     excerpt: 'Исследование выявило ключевые компетенции для успешной карьеры в цифровой экономике.',
-    featured: false,
-    views: '9.3K'
+    featured: false
   }
 ];
 
-const categories = ['Все', 'Карьера', 'Бизнес', 'Образование', 'Экология', 'Технологии', 'Культура'];
+
 
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [email, setEmail] = useState('');
-  const [activeCategory, setActiveCategory] = useState('Все');
   const [subscribed, setSubscribed] = useState(false);
 
-  const filteredNews = newsArticles.filter(article => {
-    const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = activeCategory === 'Все' || article.category === activeCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const filteredNews = newsArticles.filter(article =>
+    article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    article.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const hero = useScrollAnimation();
+  const featured = useScrollAnimation();
+  const values = useScrollAnimation();
+  const newsletter = useScrollAnimation();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,7 +132,12 @@ export default function Index() {
         </div>
       </header>
 
-      <div className="gradient-black text-white py-16 lg:py-24">
+      <div 
+        ref={hero.elementRef}
+        className={`gradient-black text-white py-16 lg:py-24 transition-all duration-1000 ${
+          hero.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="container mx-auto px-4 lg:px-8">
           <h2 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
             Актуальные новости<br />
@@ -132,21 +159,6 @@ export default function Index() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 lg:px-8 -mt-8">
-        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
-          {categories.map((cat) => (
-            <Button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              variant={activeCategory === cat ? 'default' : 'outline'}
-              className={activeCategory === cat ? 'gradient-gold text-black font-bold' : 'bg-white hover:bg-gray-50 font-medium'}
-            >
-              {cat}
-            </Button>
-          ))}
-        </div>
-      </div>
-
       <main className="container mx-auto px-4 lg:px-8 py-12">
         {filteredNews.length === 0 && searchQuery && (
           <div className="text-center py-20">
@@ -159,32 +171,37 @@ export default function Index() {
           <div className="space-y-12">
             {filteredNews
               .filter(article => article.featured)
-              .map((article) => (
-                <Card key={article.id} className="overflow-hidden border-0 shadow-2xl hover-lift cursor-pointer">
-                  <div className="grid lg:grid-cols-2 gap-0">
-                    <div className="relative h-[400px] lg:h-auto overflow-hidden">
-                      <img
-                        src={article.image}
-                        alt={article.title}
-                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                      />
-                      <div className="absolute top-6 left-6">
-                        <Badge className="gradient-gold text-black font-bold text-sm px-4 py-2">
-                          {article.category}
-                        </Badge>
+              .map((article, index) => {
+                const anim = useScrollAnimation();
+                return (
+                  <Card 
+                    key={article.id} 
+                    ref={anim.elementRef}
+                    className={`overflow-hidden border-0 shadow-2xl hover-lift cursor-pointer transition-all duration-1000 ${
+                      anim.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+                    }`}
+                    style={{ transitionDelay: `${index * 100}ms` }}
+                  >
+                    <div className="grid lg:grid-cols-2 gap-0">
+                      <div className="relative h-[400px] lg:h-auto overflow-hidden">
+                        <img
+                          src={article.image}
+                          alt={article.title}
+                          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                        />
+                        <div className="absolute top-6 left-6">
+                          <Badge className="gradient-gold text-black font-bold text-sm px-4 py-2">
+                            {article.category}
+                          </Badge>
+                        </div>
                       </div>
-                    </div>
-                    <div className="p-8 lg:p-12 flex flex-col justify-center bg-white">
-                      <div className="flex items-center gap-4 mb-4 text-sm text-gray-500">
-                        <span className="flex items-center gap-2">
-                          <Icon name="Calendar" className="h-4 w-4" />
-                          {article.date}
-                        </span>
-                        <span className="flex items-center gap-2">
-                          <Icon name="Eye" className="h-4 w-4" />
-                          {article.views}
-                        </span>
-                      </div>
+                      <div className="p-8 lg:p-12 flex flex-col justify-center bg-white">
+                        <div className="flex items-center gap-4 mb-4 text-sm text-gray-500">
+                          <span className="flex items-center gap-2">
+                            <Icon name="Calendar" className="h-4 w-4" />
+                            {article.date}
+                          </span>
+                        </div>
                       <h3 className="text-4xl lg:text-5xl font-bold mb-3 leading-tight">
                         {article.title}
                       </h3>
@@ -201,30 +218,36 @@ export default function Index() {
                     </div>
                   </div>
                 </Card>
-              ))}
+                );
+              })}
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredNews
                 .filter(article => !article.featured)
-                .map((article) => (
-                  <Card key={article.id} className="overflow-hidden border-0 shadow-xl hover-lift cursor-pointer group">
-                    {article.image && (
-                      <div className="relative h-64 overflow-hidden">
-                        <img
-                          src={article.image}
-                          alt={article.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                        <Badge className="absolute top-4 left-4 gradient-gold text-black font-bold">
-                          {article.category}
-                        </Badge>
-                        <div className="absolute bottom-4 right-4 flex items-center gap-2 text-white text-sm">
-                          <Icon name="Eye" className="h-4 w-4" />
-                          {article.views}
+                .map((article, index) => {
+                  const anim = useScrollAnimation();
+                  return (
+                    <Card 
+                      key={article.id} 
+                      ref={anim.elementRef}
+                      className={`overflow-hidden border-0 shadow-xl hover-lift cursor-pointer group transition-all duration-1000 ${
+                        anim.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+                      }`}
+                      style={{ transitionDelay: `${index * 100}ms` }}
+                    >
+                      {article.image && (
+                        <div className="relative h-64 overflow-hidden">
+                          <img
+                            src={article.image}
+                            alt={article.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                          <Badge className="absolute top-4 left-4 gradient-gold text-black font-bold">
+                            {article.category}
+                          </Badge>
                         </div>
-                      </div>
-                    )}
+                      )}
                     <CardHeader className="space-y-4">
                       <div className="text-sm text-gray-500 flex items-center gap-2">
                         <Icon name="Calendar" className="h-4 w-4" />
@@ -238,12 +261,18 @@ export default function Index() {
                       </CardDescription>
                     </CardHeader>
                   </Card>
-                ))}
+                  );
+                })}
             </div>
           </div>
         )}
 
-        <div className="mt-20 gradient-black text-white p-12 lg:p-16 relative overflow-hidden">
+        <div 
+          ref={newsletter.elementRef}
+          className={`mt-20 gradient-black text-white p-12 lg:p-16 relative overflow-hidden transition-all duration-1000 ${
+            newsletter.isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`}
+        >
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
           <div className="relative z-10 max-w-2xl">
@@ -277,7 +306,12 @@ export default function Index() {
           </div>
         </div>
 
-        <div className="mt-20 grid md:grid-cols-3 gap-12">
+        <div 
+          ref={values.elementRef}
+          className={`mt-20 grid md:grid-cols-3 gap-12 transition-all duration-1000 ${
+            values.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+          }`}
+        >
           <div className="space-y-4">
             <div className="w-16 h-16 gradient-gold flex items-center justify-center">
               <Icon name="Award" className="h-8 w-8 text-black" />
