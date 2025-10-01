@@ -5,7 +5,7 @@ export const newsArticles = [
     subtitle: 'Кто станет востребованным в 2025 году',
     category: 'Карьера',
     date: '1 октября 2025',
-    image: '/img/68d9cf49-17e9-4ad1-ba9b-07219946494e.jpg',
+    image: '/img/c58ba8d6-82b4-42f6-861f-37b6caf57681.jpg',
     excerpt: 'Аналитика показывает стремительный рост интереса к IT, креативным индустриям и зеленой энергетике среди молодых специалистов.',
     featured: true
   },
@@ -14,7 +14,7 @@ export const newsArticles = [
     title: 'Студенческие стартапы получили рекордное финансирование',
     category: 'Бизнес',
     date: '30 сентября 2025',
-    image: '/img/91d568ff-996a-4056-ad0c-7e87c6ae0d5b.jpg',
+    image: '/img/14dbcd97-0bfb-4e82-bda4-aa30a08f9329.jpg',
     excerpt: 'Венчурные фонды инвестировали более 15 млрд рублей в проекты молодых предпринимателей.',
     featured: false
   },
@@ -23,7 +23,7 @@ export const newsArticles = [
     title: 'Новая программа обмена для студентов запущена в 50 регионах',
     category: 'Образование',
     date: '29 сентября 2025',
-    image: '/img/68d9cf49-17e9-4ad1-ba9b-07219946494e.jpg',
+    image: '/img/c58ba8d6-82b4-42f6-861f-37b6caf57681.jpg',
     excerpt: 'Минобрнауки объявило о старте федеральной программы межрегионального студенческого обмена.',
     featured: false
   },
@@ -32,7 +32,7 @@ export const newsArticles = [
     title: 'Молодежные инициативы в сфере экологии получают поддержку',
     category: 'Экология',
     date: '28 сентября 2025',
-    image: '/img/91d568ff-996a-4056-ad0c-7e87c6ae0d5b.jpg',
+    image: '/img/14dbcd97-0bfb-4e82-bda4-aa30a08f9329.jpg',
     excerpt: 'Правительство выделило гранты на реализацию 200+ проектов по защите окружающей среды.',
     featured: false
   },
@@ -41,7 +41,7 @@ export const newsArticles = [
     title: 'Цифровая грамотность: новые стандарты для молодых специалистов',
     category: 'Технологии',
     date: '27 сентября 2025',
-    image: '/img/68d9cf49-17e9-4ad1-ba9b-07219946494e.jpg',
+    image: '/img/c58ba8d6-82b4-42f6-861f-37b6caf57681.jpg',
     excerpt: 'Исследование выявило ключевые компетенции для успешной карьеры в цифровой экономике.',
     featured: false
   },
@@ -50,7 +50,7 @@ export const newsArticles = [
     title: 'Молодые ученые представили прорывные разработки',
     category: 'Наука',
     date: '26 сентября 2025',
-    image: '/img/91d568ff-996a-4056-ad0c-7e87c6ae0d5b.jpg',
+    image: '/img/14dbcd97-0bfb-4e82-bda4-aa30a08f9329.jpg',
     excerpt: 'На всероссийском форуме молодых ученых представлено более 300 инновационных проектов.',
     featured: false
   }
@@ -63,7 +63,7 @@ export const journalists = [
     position: 'Главный редактор',
     specialization: 'Социальная журналистика',
     experience: '12 лет',
-    image: '/img/5b4497bd-00bd-4650-a31c-bfaf246b1e74.jpg'
+    image: '/img/71986d06-b4aa-49fc-8619-e219a5e2c1a5.jpg'
   },
   {
     id: 2,
@@ -71,7 +71,7 @@ export const journalists = [
     position: 'Заместитель главного редактора',
     specialization: 'Политика и экономика',
     experience: '10 лет',
-    image: '/img/5b4497bd-00bd-4650-a31c-bfaf246b1e74.jpg'
+    image: '/img/71986d06-b4aa-49fc-8619-e219a5e2c1a5.jpg'
   },
   {
     id: 3,
@@ -79,7 +79,7 @@ export const journalists = [
     position: 'Редактор отдела образования',
     specialization: 'Образование и наука',
     experience: '8 лет',
-    image: '/img/5b4497bd-00bd-4650-a31c-bfaf246b1e74.jpg'
+    image: '/img/71986d06-b4aa-49fc-8619-e219a5e2c1a5.jpg'
   },
   {
     id: 4,
@@ -87,6 +87,6 @@ export const journalists = [
     position: 'Корреспондент',
     specialization: 'Культура и искусство',
     experience: '5 лет',
-    image: '/img/5b4497bd-00bd-4650-a31c-bfaf246b1e74.jpg'
+    image: '/img/71986d06-b4aa-49fc-8619-e219a5e2c1a5.jpg'
   }
 ];

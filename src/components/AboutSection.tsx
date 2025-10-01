@@ -12,7 +12,7 @@ export default function AboutSection() {
         </div>
         
         <img
-          src="/img/91d568ff-996a-4056-ad0c-7e87c6ae0d5b.jpg"
+          src="/img/14dbcd97-0bfb-4e82-bda4-aa30a08f9329.jpg"
           alt="Редакция"
           className="w-full h-96 object-cover rounded-lg shadow-2xl"
         />
